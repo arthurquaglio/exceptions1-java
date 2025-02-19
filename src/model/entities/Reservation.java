@@ -3,7 +3,7 @@ package model.entities;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.TimeUnit;
+
 
 public class Reservation {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -38,9 +38,17 @@ public class Reservation {
         return duration.toDays();
     }
 
-    public void updateDates(LocalDateTime checkin, LocalDateTime checkout){
-        this.checkIn = checkin;
-        this.checkOut = checkout;
+    public String updateDates(LocalDateTime checkIn, LocalDateTime checkOut){
+        LocalDateTime now = LocalDateTime.now();
+        if (checkIn.isBefore(now) || checkOut.isBefore(now) ) {
+            return "Reservation dates for updates must be future dates";
+        }
+        if (!checkOut.isAfter(checkIn)) {
+            return "Check-out date must be after check-in date";
+        }
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        return null;
     }
 
     @Override

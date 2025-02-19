@@ -2,8 +2,6 @@ package application;
 
 import model.entities.Reservation;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -33,19 +31,14 @@ public class Program {
             System.out.print("Check-out (dd/MM/yyyy): ");
             checkOut = LocalDateTime.parse(sc.nextLine()+" 00:00:00", formatter);
 
-            LocalDateTime now = LocalDateTime.now();
-            if (checkIn.isBefore(now) || checkOut.isBefore(now) ) {
-                System.out.println("Error in reservation: Reservation dates for updates must be future dates");
-            } else if (!checkOut.isAfter(checkIn)) {
-                System.out.println("Error in reservation: Check-out date must be after check-in date");
-            }else{
-                reservation.updateDates(checkIn, checkOut);
-                System.out.println("Reservation: "+reservation);
+            String error =  reservation.updateDates(checkIn, checkOut);
+            if (error != null) {
+                System.out.println("Error in reservation: "+error);
+            }
+            else {
+                System.out.println("Reservation: " + reservation);
             }
         }
-
-
-
         sc.close();
     }
 }
